@@ -16,10 +16,15 @@ class Controller_Core_Website extends Controller_Template
 
     public static $settings = array();
 
+    public $auth_required = true;
+    public $auth_actions = array();
+
+
+    protected static $account = null;
+
 
     public function __construct(Request $request, Response $response)
     {
-
         $dotSettings = defined(WEBSITE) ? array() : json_decode(WEBSITE, true);
 
         $settings = Kohana::$config->load('website')->as_array();
@@ -30,6 +35,19 @@ class Controller_Core_Website extends Controller_Template
         //$this->backend_cookie = json_decode(Cookie::get(Constants::BE_COOKIE), true);
 
         parent::__construct($request, $response);
+
+        //If a user is not logged in and authentication is required:
+        if ($this->auth_required && !Auth::instance()->logged_in()) {
+            $this->redirect('/login?url=' . URL::site(Request::current()->uri()));
+        }
+
+        if (in_array($this->request->action(), $this->auth_actions)) {
+            if (!Account::factory()->isLoggedIn()) {
+                echo $this->request->action() . ' requires Authentication!';
+                $this->redirect('/login?url=' . URL::site(Request::current()->uri()));
+            }
+            //$this->template_file = 'backend';
+        };
     }
 
 
@@ -55,11 +73,29 @@ class Controller_Core_Website extends Controller_Template
 
         $current_url = URL::Site(Request::detect_uri(), true);
         View::bind_global('current_url', $current_url);
+        View::bind_global('site_settings', self::$settings);
 
         $this->template = $new_template;
+
+
+
+        if ((Account::factory()->isLoggedIn() || Account::factory()->isGuestUser()) && (static::$account = Account::factory()->profile())) {
+        } else {
+            static::$account = Account::factory()->createGuest();
+        }
+        View::bind_global('account', static::$account);
+
         parent::before();
 
 
     }
 
+
+    public function after()
+    {
+        if ($this->auto_render) {
+
+        }
+        parent::after();
+    }
 }
