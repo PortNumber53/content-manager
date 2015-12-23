@@ -1,10 +1,4 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-/**
- * Created by IntelliJ IDEA.
- * User: mauricio
- * Date: 11/7/2015
- * Time: 8:03 PM
- */
 
 /**
  * Class Controller_Core_Website
@@ -16,7 +10,7 @@ class Controller_Core_Website extends Controller_Template
 
     public static $settings = array();
 
-    public $auth_required = true;
+    public $auth_required = false;
     public $auth_actions = array();
 
 
@@ -47,7 +41,17 @@ class Controller_Core_Website extends Controller_Template
                 $this->redirect('/login?url=' . URL::site(Request::current()->uri()));
             }
             //$this->template_file = 'backend';
-        };
+        }
+
+        if (strpos(strtolower($this->request->headers('accept')),
+                'application/json') !== false || $this->request->is_ajax() || !empty($this->json) || (strtolower($this->request->controller()) == 'upload' && strtolower($this->request->action()) == 'receive')
+        ) {
+            $this->json = json_decode(file_get_contents('php://input'), true);
+            $this->auto_render = false;
+            $this->request->action('ajax_' . $this->request->action());
+            $this->response->headers('content-type', 'application/json');
+        }
+
     }
 
 
@@ -78,7 +82,6 @@ class Controller_Core_Website extends Controller_Template
         $this->template = $new_template;
 
 
-
         if ((Account::factory()->isLoggedIn() || Account::factory()->isGuestUser()) && (static::$account = Account::factory()->profile())) {
         } else {
             static::$account = Account::factory()->createGuest();
@@ -95,6 +98,15 @@ class Controller_Core_Website extends Controller_Template
     {
         if ($this->auto_render) {
 
+        } else {
+            $content_type = Arr::path($this->response->headers(), 'content-type', 'text/html');
+            switch ($content_type) {
+                case 'application/json':
+                    $this->response->body(json_encode($this->output));
+                    break;
+                default:
+                    $this->response->body($this->output);
+            }
         }
         parent::after();
     }
