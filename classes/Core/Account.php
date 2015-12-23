@@ -1,16 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-/**
- * Created by IntelliJ IDEA.
- * User: mauricio
- * Date: 11/8/2015
- * Time: 12:41 PM
- */
 
 /**
  * Class Core_Account
  */
 class Core_Account extends Abstracted
 {
+    const REMOVE_SENSITIVE = '.';
+
+    protected static $data = array();
 
     public static function isLoggedIn()
     {
@@ -37,26 +34,15 @@ class Core_Account extends Abstracted
 
         $error = false;
         $username = 'guest_' . str_replace('.', '', microtime(true) . mt_rand(10000, 99999));
-        $data = array(
+        $data_cookie = array(
             '_id' => '/' . DOMAINNAME . '/' . $username,
             'profile' => 'guest',
             'username' => $username,
-            'password' => '123',
             'display_name' => $username,
             'name' => $username,
         );
-        $result = Model_Account::saveRow($data, $error);
-        //Force a login
-        if ($result) {
-            //Only store minimal information in the cookie
-            $data_cookie = array(
-                '_id' => $result['_id'],
-                'display_name' => $data['display_name'],
-                'username' => $data['username'],
-                'profile' => 'guest',
-            );
-            Cookie::set('account', json_encode($data_cookie));
-        }
+
+        Cookie::set('account', json_encode($data_cookie));
         return $data_cookie;
     }
 

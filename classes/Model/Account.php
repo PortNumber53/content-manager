@@ -1,16 +1,43 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-/**
- * Created by IntelliJ IDEA.
- * User: mauricio
- * Date: 11/8/2015
- * Time: 12:45 PM
- */
 
 /**
  * Class Model_Account
  */
 class Model_Account extends Model_Abstract
 {
+
+    protected static $_table_name = 'account';
+    protected static $_primary_key = '_id';
+
+    protected static $_columns = array(
+        '_id' => '',
+        'profile' => '',
+        'username' => '',
+        'password' => '',
+        'display_name' => '',
+        'hash' => '',
+        'created_at' => '',
+        'updated_at' => '',
+        'last_login' => '',
+        'activation' => '',
+        'json_data' => '',
+    );
+
+    protected static $_json_columns = array();
+
+    public static function _beforeSave(&$data)
+    {
+        $exists = static::getAccountByUsername($data['username']);
+        if ($exists) {
+
+        } else {
+
+        }
+        $data[self::$_primary_key] = '/dev.truvis.co/' . $data['username'];
+
+        return $data;
+    }
+
 
     public static function getAccountByUsername($username)
     {
@@ -27,11 +54,11 @@ class Model_Account extends Model_Abstract
                 unset($data['_id']);
                 $row = array_merge($row, $data);
                 unset($row['data']);
-                $extra_json = json_decode(empty(Arr::path($row, 'extra_json')) ? '{}' : Arr::path($row, 'extra_json',
+                $json_data = json_decode(empty(Arr::path($row, 'json_data')) ? '{}' : Arr::path($row, 'json_data',
                     '{}'), true);
-                unset($extra_json['_id']);
-                $row = array_merge($row, $extra_json);
-                unset($row['extra_json']);
+                unset($json_data['_id']);
+                $row = array_merge($row, $json_data);
+                unset($row['json_data']);
 
                 Cache::instance('redis')->set($cache_key, json_encode($row));
             } else {
