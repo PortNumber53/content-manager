@@ -31,9 +31,8 @@ if (!Route::$cache) {
         'action' => 'profile',
     ));
 
-    Route::set('html-content', '(<request>.<type>(<override>))', array(
+    Route::set('html-content', '(<request>(<override>))', array(
         'request' => '[a-zA-Z0-9_/\-]+',
-        'type' => '(html|shtml)',
         'override' => '(:edit)',
     ))->filter(function ($route, $params, $request) {
         // Prefix the method to the action name
@@ -47,7 +46,6 @@ if (!Route::$cache) {
         'controller' => 'Content',
         'action' => 'view',
         'request' => '/',
-        'type' => 'html',
     ));
 
     Route::set('image-actions', '<request>.<type>', array(
