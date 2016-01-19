@@ -13,7 +13,7 @@ class Controller_Core_Website extends Controller_Template
     public $auth_required = false;
     public $auth_actions = array();
 
-
+    protected static $template_modules = array();
     protected static $account = null;
 
 
@@ -81,18 +81,17 @@ class Controller_Core_Website extends Controller_Template
 
         $this->template = $new_template;
 
-
-        if ((Account::factory()->isLoggedIn() || Account::factory()->isGuestUser()) && (static::$account = Account::factory()->profile())) {
+        if (Account::factory()->isLoggedIn() && !Account::factory()->isGuestUser() && (static::$account = Account::factory()->profile())) {
         } else {
             static::$account = Account::factory()->createGuest();
         }
         View::bind_global('account', static::$account);
 
+        if ($this->auto_render) {
+            View::bind_global('template_modules', static::$template_modules);
+        }
         parent::before();
-
-
     }
-
 
     public function after()
     {
