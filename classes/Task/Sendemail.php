@@ -38,6 +38,10 @@ class Task_Sendemail extends Minion_Task
             echo " [x] Received ", $msg->body, "\n";
             $data = json_decode($msg->body, true);
 
+            if (!isset($data['contact_email'])) {
+                $data['contact_email'] = Arr::path(static::$settings, 'website.contact_email', 'debug@portnumber53.com');
+            }
+
             $model_setting = new Model_Setting();
             $template_data = $model_setting->getDataByName('email-template-' . $data['template']);
 
@@ -51,7 +55,7 @@ class Task_Sendemail extends Minion_Task
 
             print_r($search_replace_data);
             print_r($data);
-            $result = mail($data['email'], $subject, $body);
+            $result = mail($data['contact_email'], $subject, $body);
             var_dump($result);
             ob_flush();
             sleep(5);
