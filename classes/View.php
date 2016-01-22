@@ -21,18 +21,20 @@ class View extends Kohana_View
      */
     public function set_filename($file)
     {
-        if (($path = Kohana::find_file('views', $file)) === false) {
-            if (($path = Kohana::find_file('views', 'template/' . self::$template_name . '/' . $file)) === false) {
-                if (($path = Kohana::find_file('views',
-                        'template/' . self::$template_name . '/modules/' . $file)) === false
-                ) {
-                    if (($path = Kohana::find_file('views', 'template/default/' . $file)) === false) {
-                        if (($path = Kohana::find_file('views', 'template/default/modules/' . $file)) === false) {
-                            throw new View_Exception('The requested view :file could not be found (template :template)',
-                                array(
-                                    ':file' => $file,
-                                    ':template' => self::$template_name,
-                                ));
+        if (($path = Kohana::find_file('views', $file)) === FALSE)
+        {
+            if (($path = Kohana::find_file('views', 'template/' . self::$template_name . '/' . $file)) === FALSE)
+            {
+                if (($path = Kohana::find_file('views', 'template/' . self::$template_name . '/modules/' . $file)) === FALSE)
+                {
+                    if (($path = Kohana::find_file('views', 'template/default/' . $file)) === FALSE)
+                    {
+                        if (($path = Kohana::find_file('views', 'template/default/modules/' . $file)) === FALSE)
+                        {
+                            throw new View_Exception('The requested view :file could not be found (template :template)', array(
+                                ':file' => $file,
+                                ':template' => self::$template_name,
+                            ));
                         }
                     }
                 }
