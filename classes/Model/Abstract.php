@@ -18,12 +18,12 @@ abstract class Model_Abstract
                 if (count($row) === 1) {
                     $row = array_shift($row);
                     $data = Arr::path($row, 'data');
-                    $data = json_decode(empty($data) ? '{}' : Arr::path($row, 'data', '{}'), true);
+                    $data = json_decode(Arr::path($row, 'data', '{}'), true);
                     unset($data['_id']);
                     $row = array_merge($row, $data);
                     unset($row['data']);
                     $extra_json = Arr::path($row, 'extra_json');
-                    $extra_json = json_decode(empty($extra_json) ? '{}' : Arr::path($row, 'extra_json', '{}'), true);
+                    $extra_json = json_decode(Arr::path($row, 'extra_json', '{}'), true);
                     unset($extra_json['_id']);
                     $row = array_merge($row, $extra_json);
                     unset($row['extra_json']);
@@ -44,8 +44,6 @@ abstract class Model_Abstract
                 'line' => $e->getLine(),
             );
             return false;
-        } finally {
-            return $row;
         }
     }
 
