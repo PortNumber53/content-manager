@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
 /**
  * Class Account
@@ -43,6 +43,7 @@ class Account extends Core_Account
         if (count($errors) === 0) {
             $model_account = new Model_Account();
             $result = $model_account->save($signup_data, $errors);
+            Cookie::set('account', json_encode($signup_data));
         } else {
             return false;
         }

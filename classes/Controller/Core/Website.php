@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
 /**
  * Class Controller_Core_Website
@@ -13,9 +13,9 @@ class Controller_Core_Website extends Controller_Template
     public $auth_required = false;
     public $auth_actions = array();
 
+    public $output = null;
 
     protected static $account = null;
-
 
     public function __construct(Request $request, Response $response)
     {

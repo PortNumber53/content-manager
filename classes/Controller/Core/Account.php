@@ -19,8 +19,11 @@ class Controller_Core_Account extends Controller_Website
     {
         $main = 'account/profile';
 
-        View::bind_global('main', $main);
+        $data = Account::factory()->profile();
+        View::bind_global('data', $data);
 
+
+        View::bind_global('main', $main);
     }
 
     public function action_signup()
