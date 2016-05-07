@@ -43,12 +43,11 @@ class Model_Content extends Model_Abstract
             //print_r($row);
             if (count($row) == 1) {
                 $row = array_shift($row);
-                $data = json_decode(empty(Arr::path($row, 'data')) ? '{}' : Arr::path($row, 'data', '{}'), true);
+                $data = json_decode(Arr::path($row, 'data', '{}'), true);
                 unset($data['_id']);
                 $row = array_merge($row, $data);
                 unset($row['data']);
-                $json_data = json_decode(empty(Arr::path($row, 'json_data')) ? '{}' : Arr::path($row, 'json_data',
-                    '{}'), true);
+                $json_data = json_decode(Arr::path($row, 'json_data', '{}'), true);
                 unset($json_data['_id']);
                 $row = array_merge($row, $json_data);
                 unset($row['json_data']);
@@ -66,10 +65,10 @@ class Model_Content extends Model_Abstract
     public static function incrementViewCount($_id)
     {
         $query = DB::update(static::$_table_name)->
-            set(array('views' => DB::expr('views + 1')))->
-            where(static::$_primary_key, '=', $_id);
+        set(array('views' => DB::expr('views + 1')))->
+        where(static::$_primary_key, '=', $_id);
         $result = $query->execute();
-        
+
         return $result;
     }
 
@@ -83,14 +82,13 @@ class Model_Content extends Model_Abstract
             $result = $query->execute()->as_array();
             //print_r($row);
             if (count($result) > 0) {
-                foreach ($result as $key=>$row) {
+                foreach ($result as $key => $row) {
                     //$row = array_shift($row);
-                    $data = json_decode(empty(Arr::path($row, 'data')) ? '{}' : Arr::path($row, 'data', '{}'), true);
+                    $data = json_decode(Arr::path($row, 'data', '{}'), true);
                     unset($data['_id']);
                     $row = array_merge($row, $data);
                     unset($row['data']);
-                    $json_data = json_decode(empty(Arr::path($row, 'json_data')) ? '{}' : Arr::path($row, 'json_data',
-                        '{}'), true);
+                    $json_data = json_decode(Arr::path($row, 'json_data', '{}'), true);
                     unset($json_data['_id']);
                     $row = array_merge($row, $json_data);
                     unset($row['json_data']);
@@ -112,14 +110,13 @@ class Model_Content extends Model_Abstract
         $result = $query->execute()->as_array();
         //print_r($row);
         if (count($result) > 0) {
-            foreach ($result as $key=>$row) {
+            foreach ($result as $key => $row) {
                 //$row = array_shift($row);
-                $data = json_decode(empty(Arr::path($row, 'data')) ? '{}' : Arr::path($row, 'data', '{}'), true);
+                $data = json_decode(Arr::path($row, 'data', '{}'), true);
                 unset($data['_id']);
                 $row = array_merge($row, $data);
                 unset($row['data']);
-                $json_data = json_decode(empty(Arr::path($row, 'json_data')) ? '{}' : Arr::path($row, 'json_data',
-                    '{}'), true);
+                $json_data = json_decode(Arr::path($row, 'json_data', '{}'), true);
                 unset($json_data['_id']);
                 $row = array_merge($row, $json_data);
                 unset($row['json_data']);
