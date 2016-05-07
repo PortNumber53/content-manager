@@ -31,8 +31,14 @@ if (!Route::$cache) {
         'action' => 'profile',
     ));
 
+
+
     Route::set('html-content', '(<request>(<override>))', array(
+<<<<<<< HEAD
         'request' => '[a-zA-Z0-9_/\-\.]+\.html',
+=======
+        'request' => '[a-zA-Z0-9_/\-]+\.html',
+>>>>>>> 913e0c853fd71f2554c4d97a0d4b28c101a431af
         'override' => '(:edit)',
     ))->filter(function ($route, $params, $request) {
         // Prefix the method to the action name

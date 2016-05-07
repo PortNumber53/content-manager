@@ -23,19 +23,12 @@ class Core_Account extends Abstracted
         return !empty($cookie_data) && $array_data['profile'] === 'guest';
     }
 
-
     public static function createGuest()
     {
-        // Check if we already have the guest cookie
-        //$cookie = json_decode(Cookie::get('account'), true);
-        //if (isset($cookie['profile'])) {
-        //    return true;
-        //}
-
-        $error = false;
         $username = 'guest_' . str_replace('.', '', microtime(true) . mt_rand(10000, 99999));
         $data_cookie = array(
             '_id' => '/' . DOMAINNAME . '/' . $username,
+            'id' => 0,
             'profile' => 'guest',
             'username' => $username,
             'display_name' => $username,
@@ -45,5 +38,4 @@ class Core_Account extends Abstracted
         Cookie::set('account', json_encode($data_cookie));
         return $data_cookie;
     }
-
 }
