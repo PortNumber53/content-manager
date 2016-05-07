@@ -35,7 +35,6 @@ if (!Route::$cache) {
 
     Route::set('html-content', '(<request>(<override>))', array(
         'request' => '[a-zA-Z0-9_/\-\.]+\.html',
-        'request' => '[a-zA-Z0-9_/\-]+\.html',
         'override' => '(:edit)',
     ))->filter(function ($route, $params, $request) {
         // Prefix the method to the action name
