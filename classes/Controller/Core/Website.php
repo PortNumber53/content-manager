@@ -26,7 +26,6 @@ class Controller_Core_Website extends Controller_Template
         $settings = Kohana::$config->load('website')->as_array();
         self::$settings = array_merge($settings, $dotSettings);
         View::set_global('debug', Arr::path(self::$settings, 'debug', false));
-
         //$this->frontend_cookie = json_decode(Cookie::get(Constants::FE_COOKIE), true);
         //$this->backend_cookie = json_decode(Cookie::get(Constants::BE_COOKIE), true);
 
